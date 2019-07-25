@@ -8,11 +8,12 @@ import {typeDefs} from "./typeDefs";
 import {resolvers}from "./resolvers";
 import { verify } from "jsonwebtoken";
 
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "./constants";
+import { ACCESS_TOKEN_SECRET } from "./constants";
 
 
-import { Users } from './entity/User';
-import { createTokens } from './auth';
+
+//import { Users } from './entity/User';
+//import { createTokens } from './auth';
 //import { Contacts } from '../typesc/src/entity/Contact';
 
 
@@ -30,43 +31,56 @@ const startServer = async ()=>{
   const app =express();
 
   app.use(cookieParser());
+  
 
-  app.use(async(req:any,res,next)=>{
-    const refreshToken=req.cookies['refresh-token'];
-    const accessToken = req.cookies['access-token'];
-     if(!refreshToken && !accessToken){
-       return next();
-     }
+  app.use(async(req:any,_,next)=>{
+    
+    const token = req.headers.authorization;
+  if (!token) {
+    return next();
+   
+  }
+
+  
+   
+   
+   
+   
+    
+    
 
     try{
-    const data=verify(accessToken,ACCESS_TOKEN_SECRET)as any
-    req.userId=data.userId;
+    const data= verify(
+      token.replace('Bearer ', ''),
+      ACCESS_TOKEN_SECRET
+    );
+   
+    console.log("test");
+    console.log(data);
     return next();
     }catch {}
     
-    if(!refreshToken){
-      return next()
-    }
+   
 
-    let data;
+    //let data;
 
-    try {
-       data= verify(refreshToken, REFRESH_TOKEN_SECRET) as any
-      // req.userId = data.userId;
-      // return next();
-    } catch {
-        return next(); 
-    }
-    const user =await Users.findOne(data.userId)
-    if(!user || user.remember_token !==data.remember_token){
-      return next();
-    }
+    // try {
+    //    data= verify(refreshToken, REFRESH_TOKEN_SECRET) as any
+    //   // req.userId = data.userId;
+    //   // return next();
+    // } catch {
+    //     return next(); 
+    // }
+    // const user =await Users.findOne(data.userId)
+    // if(!user || user.remember_token !==data.remember_token){
+    //   return next();
+    // }
 
-     const tokens=createTokens(user);
+    //  const tokens=createTokens(user);
     
-     res.cookie("refresh-token",tokens.refreshToken);
-    // res.cookie("access-token",tokens.accessToken);
-    req.userId=user.id;
+    //  res.cookie("refresh-token",tokens.refreshToken);
+    //  res.cookie("access-token",tokens.accessToken);
+    // req.userId=user.id;
  
 
     next();

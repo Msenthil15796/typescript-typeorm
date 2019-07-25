@@ -2,10 +2,10 @@
    "type": "mysql",
    "host": "localhost",
    "port": 3306,
-   "username": "test",//enter your username of the database
-   "password": "test",//enter your password
-   "database": "test",//DB name
-   "synchronize": true,//if you want to access existing database,make synchronize "false"
+   "username": "root",
+   "password": "",
+   "database": "graphql",
+   "synchronize": false,
    "logging": false,
    "entities": [
       "src/entity/**/*.ts"
