@@ -2,10 +2,10 @@
    "type": "mysql",
    "host": "localhost",
    "port": 3306,
-   "username": "root",
-   "password": "",
-   "database": "graphql",
-   "synchronize": false,
+   "username": "*your username*",
+   "password": "*your password*",
+   "database": "DataBase Name",
+   "synchronize": false,//if it is true,it will create new tables.keep it "false" for exist old tables 
    "logging": false,
    "entities": [
       "src/entity/**/*.ts"
